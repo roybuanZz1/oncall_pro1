@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OnCall Pro – Advanced Meeting 2.0</title>
+
+<!-- Add improved dark mode toggle and advanced CSS -->
+<style>
+:root {
+  --main-gradient: linear-gradient(135deg, #ff5f6d 0%, #ffc371 100%);
+  --accent-gradient: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%);
+  --button-pink: #ff6f91;
+  --button-purple: #845ec2;
+  --button-teal: #3edfd7;
+  --main-blue: #5b86e5;
+  --main-green: #36d1c4;
+  --main-pink: #f15bb5;
+  --main-orange: #f9a826;
+  --light: #f9f6ff;
+  --light2: #fff7fd;
+  --dark: #232946;
+  --gray: #eaf0f1;
+  --danger: #ff3860;
+  --online: #29cf59;
+  --away: #ffb549;
+  --busy: #fa5047;
+}
+
+[data-theme="dark"] {
+  --main-gradient: linear-gradient(135deg, #232946 0%, #34113f 100%);
+  --accent-gradient: linear-gradient(90deg, #24364d 0%, #5b86e5 100%);
+  --button-pink: #f15bb5;
+  --button-purple: #34113f;
+  --button-teal: #67d7cc;
+  --main-blue: #24364d;
+  --main-green: #29cf59;
+  --main-pink: #f15bb5;
+  --main-orange: #ffc371;
+  --light: #292847;
+  --light2: #23243a;
+  --dark: #fff7fd;
+  --gray: #414072;
+  --danger: #fa5047;
+}
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 10%, #ffe4ec 0%, #a6e6ff 70%, #b9ffb7 100%);
+  font-family: 'Segoe UI', 'Poppins', Arial, sans-serif;
+  margin: 0;
+  color: var(--dark);
+  letter-spacing: 0.01em;
+  transition: background .4s cubic-bezier(.78,.15,.16,1.09), color .18s;
+}
+[data-theme="dark"] body {
+  background: radial-gradient(circle at 20% 7%, #20202e 0%, #232946 60%, #24364d 100%);
+  color: #fff7fd;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background: radial-gradient(circle at 20% 7%, #20202e 0%, #232946 60%, #24364d 100%);
+    color: #fff7fd;
+  }
+}
+.container {
+  margin: 0 auto;
+  margin-top: 30px;
+  max-width: 650px;
+  padding: 28px 18px 32px 18px;
+  background: linear-gradient(120deg, #f3e7e9 0%, #ffe4ec 50%, #c6ffe8 100%);
+  border-radius: 30px;
+  box-shadow: 0 14px 36px 2px rgba(255,120,120,0.12), 0 4px 24px 1px #8ec5fcaa;
+  border: 2.5px solid #ffe677b6;
+  position: relative;
+}
+[data-theme="dark"] .container {
+  background: linear-gradient(120deg, #232946 0%, #232946c9 40%, #2b3a67 100%);
+  border-color: #5b86e555;
+  box-shadow: 0 12px 40px 8px #5b86e566;
+}
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--main-gradient);
+  padding: 18px 22px;
+  border-radius: 18px;
+  color: white;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 16px 0 #ff6f9122;
+  font-weight: bold;
+  user-select: none;
+  position: relative;
+}
+.main-title {
+  font-size: 2.2rem;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.main-title i {
+  color: #ffd36e;
+  font-size: 2.2rem;
+  margin-right: 3px;
+  animation: floatVid 1.6s infinite alternate cubic-bezier(.6,.02,.38,1);
+}
+@keyframes floatVid {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6px) scale(1.10); }
+}
+.beta-badge {
+  background: var(--accent-gradient);
+  color: white;
+  padding: 6px 16px 6px 12px;
+  border-radius: 19px 17px 19px 17px;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px 0 #5b86e522;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.beta-badge i { color: #fd4586; }
+/* Dark mode toggle button */
+#theme-toggle {
+  background: linear-gradient(90deg,#ffe4ec,#8ec5fc 100%);
+  border: none;
+  border-radius: 100px;
+  color: #6749d4;
+  padding: 7px 19px;
+  font-size: 1.05em;
+  margin-left: 18px;
+  box-shadow: 0 1px 10px #3edfd740;
+  cursor: pointer;
+  transition: filter .13s, transform .13s, background .17s, color .17s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+}
+@media (hover:hover) {
+#theme-toggle:hover {
+  background: linear-gradient(90deg,#aefff6,#fd4586 100%);
+  color: #fff;
+  filter: brightness(1.03);
+  transform: scale(1.06);
+}
+}
+/* Add style for logout button */
+.logout-btn {
+  background: linear-gradient(90deg, #ff5f6d 0%, #ffc371 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 18px;
+  box-shadow: 0 1.5px 8px #fd458655;
+  cursor: pointer;
+  transition: filter 0.14s, transform 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.delete-account-btn {
+  background: linear-gradient(90deg, #8b0000 0%, #ff5f6d 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-left: 8px;
+  box-shadow: 0 1.5px 8px #fd458655;
+  cursor: pointer;
+  transition: filter 0.14s, transform 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.delete-account-btn:hover {
+  filter: brightness(1.11);
+  transform: scale(1.06);
+}
+.logout-btn:hover {
+  filter: brightness(1.11);
+  transform: scale(1.06);
+}
+.room-input {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 16px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.room-input input {
+  background: linear-gradient(90deg, #fff9ea 0%, #e1f5c4 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 21px;
+  font-size: 1.06rem;
+  font-family: inherit;
+  color: #333;
+  outline: none;
+  box-shadow: 0 2px 12px 0 #aee7ff19;
+  width: 150px;
+  transition: box-shadow 0.16s;
+}
+.room-input input:focus {
+  box-shadow: 0 0 0 2px #67d7cc, 0 2px 12px 0 #aee7ff19;
+}
+.room-input button, .room-input #nickname {
+  background: var(--button-purple);
+  color: white;
+  font-weight: 600;
+  padding: 8px 21px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px 0 #ff5f6d20;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.16s;
+}
+.room-input button:first-of-type {
+  background: var(--button-pink);
+}
+.room-input button:last-of-type {
+  background: var(--button-teal);
+}
+.room-input button:hover,
+.room-input #nickname:focus {
+  filter: brightness(1.12) saturate(1.14);
+  transform: scale(1.04);
+}
+.room-input i { margin-right: 5px; }
+.room-input #nickname {
+  background: linear-gradient(93deg, #fff7fd 20%, #e1f5c4 100%);
+  color: #6749d4;
+  font-size: 1rem;
+  padding: 8px 14px;
+  box-shadow: 0 1px 6px #fd458622;
+  margin-left: 0;
+  width: 115px;
+  border: 1px solid #ffd36e55;
+}
+.room-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #fea07d, #e9faff 50%, #acfffc 100%);
+  color: #2d3748;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.06em;
+  border: 1.5px solid #ffe67799;
+  box-shadow: 0 3px 13px 0 #fbb1bd22;
+}
+[data-theme="dark"] .room-actions {
+  background: linear-gradient(90deg, #232946 37%, #5b86e5aa 100%);
+  color: #fff9e1;
+  border-color: #3929cf44;
+}
+.room-actions span i { color: #fd4586; margin-right: 2px; }
+.room-actions b { color: #7d53f0; text-shadow: 0 1px #ffe4ec; }
+.room-actions button, .record-btn, .screenshare-btn {
+  margin-left: 10px;
+  background: var(--main-orange);
+  color: #232946;
+  font-weight: bold;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 18px 6px 12px;
+  box-shadow: 0 2px 8px 0 #f89a2928;
+  font-size: 1rem;
+  transition: filter 0.15s, transform 0.13s;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.room-actions button#leave-room-btn {
+  background: var(--danger);
+  color: white;
+  margin-left: 6px;
+}
+.room-actions button#delete-room-btn {
+  background: #8b0000;
+  color: #fff;
+  margin-left: 6px;
+}
+.room-actions button.recording {
+  background: linear-gradient(90deg,#fa5047 10%, #ffc371 90%);
+  color: white;
+  animation: recpulse 1s infinite alternate;
+}
+@keyframes recpulse {
+  0% { box-shadow: 0 0 2px #fa504799; }
+  100% { box-shadow: 0 0 16px #fa504744; }
+}
+.room-actions button:hover,
+.record-btn:hover,
+.screenshare-btn:hover { filter: brightness(1.09); transform: scale(1.04); }
+.room-actions i { margin-right: 6px; }
+#toggle-participants-btn, #toggle-chat-btn, #toggle-settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fff8dc,#f15bb5 25%, #5b86e5 100%);
+  color: white;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 30px;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 1px 16px #845ec222;
+  position: absolute;
+  right: 36px;
+  top: 28px;
+  z-index: 2;
+  opacity: 0.86;
+  cursor: pointer;
+  transition: outline 0.2s, box-shadow 0.16s, background 0.13s;
+  margin-left: 9px;
+}
+#toggle-chat-btn { right: 92px; }
+#toggle-settings-btn { right: 148px; }
+#toggle-participants-btn:active, #toggle-chat-btn:active, #toggle-settings-btn:active {
+  box-shadow: 0 4px 20px 0 #fd458622;
+}
+#toggle-participants-btn i, #toggle-chat-btn i, #toggle-settings-btn i {
+  color: #fff;
+}
+#toggle-settings-btn { display: flex; background: linear-gradient(135deg,#ffd36e 0,#845ec2 90%) !important;}
+/* Video grid (advanced) */
+.video-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 38px;
+  justify-content: center;
+  margin: 26px 0 23px 0;
+  padding: 16px;
+  min-height: 180px;
+  background: linear-gradient(112deg, #e0c3fc 0%, #8ec5fc 50%, #f3e7e9 100%);
+  border-radius: 20px;
+  box-shadow: 0 5px 32px #98e7f233;
+  position: relative;
+}
+[data-theme="dark"] .video-grid {
+  background: linear-gradient(110deg, #232946 40%, #5b86e522 100%);
+  box-shadow: 0 6px 24px #845ec288;
+}
+.video-container {
+  background: linear-gradient(126deg, #70f1c9 0%, #fd8dfff6 100%);
+  border-radius: 20px;
+  padding: 11px 16px;
+  box-shadow: 0 5px 14px 0 #5b86e533;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 290px;
+}
+[data-theme="dark"] .video-container {
+  background: linear-gradient(125deg, #34113f 17%, #5b86e544 100%);
+}
+.video-container video {
+  border-radius: 15px;
+  border: 2.5px solid #fd458690;
+  background: #fff7fd;
+  width: 282px;
+  height: 175px;
+  object-fit: cover;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 10px #fec3f366;
+  background-color: #19195322;
+}
+.you-label {
+  color: #fff;
+  background: linear-gradient(90deg, #845ec2 0%, #fd4586 100%);
+  box-shadow: 0 1px 2px #fd458688;
+  font-size: 1em;
+  padding: 3px 14px;
+  border-radius: 18px;
+  position: absolute;
+  left: 22px;
+  bottom: 12px;
+  font-weight: bold;
+  z-index: 4;
+  letter-spacing: 0.03em;
+}
+
+/* Controls (advanced: add tooltips) */
+.controls {
+  display: flex;
+  gap: 26px;
+  justify-content: center;
+  margin-top: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.controls button, .record-btn, .screenshare-btn {
+  padding: 10px 24px 10px 18px;
+  font-size: 1.11em;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #ffa3a3 0%, #5b86e5 100%);
+  box-shadow: 0 2px 10px #fd458688;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.12s, transform 0.13s;
+  position: relative;
+}
+.controls button.end {
+  background: linear-gradient(65deg, #ff3860, #f15bb5 80%);
+  color: #fff !important;
+}
+.controls button[aria-pressed="true"] {
+  background: linear-gradient(120deg, #fa5047 40%, #845ec2 100%);
+  color: #ffd36e !important;
+}
+.controls button:hover, .record-btn:hover, .screenshare-btn:hover {
+  filter: brightness(1.11) contrast(1.10); transform: scale(1.065);
+}
+.controls i { margin-right: 7px; }
+
+.info-bar {
+  background: linear-gradient(90deg, #fff7ae 0%, #aee7ff 100%);
+  color: #232946de;
+  font-weight: 600;
+  font-size: 1.08rem;
+  text-align: center;
+  padding: 11px 14px;
+  border-radius: 15px;
+  margin: 40px 0 18px 0;
+  box-shadow: 0 3px 14px 0 #e1f5c433;
+  border: 1.5px solid #fbb1bd65;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+}
+[data-theme="dark"] .info-bar {
+  background: linear-gradient(90deg,#292847 0%, #845ec288 100%);
+  color: #ffd36e;
+  border: 1.5px solid #3929cf55;
+  box-shadow: 0 2px 10px #845ec288;
+}
+.info-bar i { color: #fa5047; margin-right: 4px; }
+#connection-status {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1em;
+  gap: 5px;
+}
+#connection-status .status-dot {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--online);
+  margin-right: 4px;
+  box-shadow: 0 0 8px #29cf5977;
+  animation: pingDot 1.4s infinite alternate cubic-bezier(.46,0,0,1);
+}
+@keyframes pingDot {
+  from { box-shadow: 0 0 5px #29cf5988; }
+  to   { box-shadow: 0 0 22px #29cf5955; }
+}
+/* Participants Side Panel + Avatars + Status + Action */
+.participants-panel {
+  position: fixed;
+  top: 60px;
+  right: -280px;
+  width: 260px;
+  background: linear-gradient(120deg, #5b86e5b7, #f15bb5bb 65%, #fafcff 100%);
+  color: #fff !important;
+  border-radius: 16px 0 0 16px;
+  box-shadow: 0 2px 30px #fd458655;
+  padding: 18px 0 22px 26px;
+  min-height: 200px;
+  z-index: 40;
+  transition: right 0.29s cubic-bezier(0.72,0.1,0.22,1.3);
+}
+.participants-panel.open { right: 0px; }
+.participants-panel h4 {
+  margin: 0 0 14px 0;
+  font-size: 1.15rem;
+  color: #fff9e1;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.participants-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.participants-list li {
+  padding: 7px 0;
+  font-size: 1.13em;
+  border-bottom: 1px solid #ffffff33;
+  color: #fffde9;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.participants-list li i {
+  color: #ffd36e;
+  margin-right: 6px;
+  font-size: 1.15em;
+}
+
+/* Chat Panel */
+#chat-panel {
+  position: fixed;
+  bottom: 0;
+  right: -380px;
+  width: 340px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(156deg, #fd5f6d66, #ffc37188 89%, #fff7fd 100%);
+  border-radius: 18px 0 0 18px;
+  box-shadow: 0 2px 30px #fd458655;
+  z-index: 45;
+  transition: right 0.29s cubic-bezier(0.72,0.18,0.13,1.13);
+  padding: 0 0 10px 0;
+}
+#chat-panel.open { right: 0; }
+.chat-header {
+  background: linear-gradient(135deg,#f148fb 0,#36d1c4 100%);
+  border-radius: 18px 0 0 0;
+  color: #fff;
+  padding: 16px 20px;
+  font-size: 1.13em;
+  font-weight: bold;
+  letter-spacing: 0.01em;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid #fff7fd55;
+}
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px 6px 18px;
+  background: linear-gradient(109deg, #ffe4ec 15%, #aefff6 80%);
+  border-radius: 0 0 0 0;
+  min-height: 120px;
+  max-height: 225px;
+  font-size: 1em;
+}
+.chat-message {
+  margin-bottom: 10px;
+  padding: 9px 16px;
+  color: #232946;
+  border-radius: 13px 13px 13px 0;
+  background: #fff9ea;
+  max-width: 85%;
+  word-break: break-word;
+  box-shadow: 0 4px 8px #fd45862b;
+}
+.chat-message.me {
+  margin-left: auto;
+  background: linear-gradient(85deg, #ffd36e 70%, #5b86e588 100%);
+  color: #34113f;
+  font-weight: 600;
+  border-radius: 13px 13px 0 13px;
+  box-shadow: 0 3px 20px 0 #36d1c480;
+}
+.chat-message.other {
+  margin-right: auto;
+  background: linear-gradient(75deg, #e7fcec 50%, #fd5f6d22 100%);
+  color: #232946;
+}
+
+#chat-send-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffc37113;
+  padding: 10px 14px 6px 14px;
+  border-radius: 0 0 0 21px;
+  border-top: 1.5px solid #fd5f6d13;
+}
+#chat-message-input {
+  flex: 1;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1.02em;
+  background: linear-gradient(90deg, #ffebf6 0%, #e1f5c4 100%);
+  color: #42275a;
+  outline: none;
+  transition: box-shadow 0.17s;
+  box-shadow: 0 1.5px 8px #e1f5c433;
+}
+#chat-send-btn {
+  background: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.15em;
+  padding: 8px 22px;
+  cursor: pointer;
+  transition: filter 0.14s, box-shadow 0.12s, transform 0.12s;
+  box-shadow: 0 1.5px 10px #5b86e533;
+}
+#chat-send-btn:hover {
+  filter: brightness(1.12);
+  transform: scale(1.07);
+}
+
+/* Signup Modal */
+.signup-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: linear-gradient(120deg, #845ec2 5%, #f15bb575 90%, #fff7fd 100%);
+  backdrop-filter: blur(2px) brightness(1.11) saturate(1.2);
+  align-items: center;
+  justify-content: center;
+  animation: fadein 0.5s cubic-bezier(.42,.03,.57,.96) 1;
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.signup-box {
+  background: linear-gradient(66deg, #f5f7fa 60%, #fae1ff 100%);
+  border-radius: 22px;
+  padding: 40px 32px 32px 32px;
+  box-shadow: 0 8px 36px 12px #f15bb525;
+  min-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+.signup-box h2 {
+  background: linear-gradient(90deg, #845ec2 0%, #ffa3a3 70%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.signup-box h2 i {
+  color: #fd4586;
+  font-size: 1.2em;
+}
+.signup-box input {
+  width: 90%;
+  border-radius: 10px;
+  border: 1.5px solid #aefffacc;
+  padding: 11px 18px;
+  font-size: 1.07em;
+  background: linear-gradient(95deg, #ffe4ec 0%, #e1f5c4 100%);
+  color: #232946;
+  margin: 4px 0 2.5px 0;
+  box-shadow: 0 1px 5px #98e7f233;
+  outline: none;
+  transition: border-color .13s, box-shadow .14s;
+}
+.signup-box input:focus {
+  border-color: #5b86e5;
+  background: linear-gradient(89deg, #aefff6 0%, #fff7fd 80%);
+  box-shadow: 0 0px 10px #5b86e522;
+}
+.signup-box button {
+  background: linear-gradient(90deg, #845ec2 0%, #fd4586 100%);
+  color: #fff;
+  font-size: 1.06rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 36px;
+  box-shadow: 0 1.5px 8px #fd458655;
+  margin-top: 10px;
+  transition: filter 0.15s, transform 0.1s;
+  cursor: pointer;
+}
+.signup-box button:hover {
+  filter: brightness(1.11);
+  transform: scale(1.07);
+}
+.signup-box .error-msg {
+  font-size: 1em;
+  padding: 5px 6px;
+  min-height: 26px;
+}
+
+/* Style for the existing-account button */
+.signup-box .existing-account-btn {
+  background: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%);
+  color: #fff;
+  font-size: 1.01rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 22px;
+  margin-top: 0;
+  margin-bottom: 7px;
+  box-shadow: 0 1.5px 8px #5b86e533;
+  transition: filter 0.12s, transform 0.1s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.signup-box .existing-account-btn:hover {
+  filter: brightness(1.08);
+  transform: scale(1.04);
+}
+.error-msg {
+  color: #ff3860;
+  background: linear-gradient(90deg, #fff4d1 0%, #ffe0eb 100%);
+  border: 1.5px solid #fa5047;
+  border-radius: 5px;
+  font-size: 1em;
+  min-height: 28px;
+  margin-top: 12px;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 16px;
+  box-shadow: 0 3px 9px rgba(230, 57, 70, 0.07);
+  transition: background 0.14s;
+}
+
+.hidden { display: none !important; }
+
+@media (max-width: 720px) {
+  .container { max-width: 98vw; padding: 8vw 2vw; }
+  .header-bar { flex-direction: column; padding: 13px 8vw; gap: 8px;}
+  .room-input, .controls { flex-direction: column; gap: 12px; }
+  #toggle-participants-btn, #toggle-chat-btn {
+    position: fixed;
+    top: unset;
+    right: 10vw;
+    bottom: 24vw;
+    margin-right: 0;
+  }
+  #toggle-chat-btn { right: 24vw; }
+  .signup-box {min-width: unset; width: 93vw;}
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="header-bar">
+    <div class="main-title"><i class="fas fa-video"></i> OnCall Pro</div>
+    <div style="display:flex; align-items:center; gap:10px">
+      <div class="beta-badge"><i class="fas fa-flask-vial"></i> Beta</div>
+      <button id="logout-btn" class="logout-btn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+      <button id="delete-account-btn" class="delete-account-btn" style="display: none;"><i class="fas fa-user-times"></i> Delete Account</button>
+    </div>
+  </div>
+
+  <div class="room-input" id="room-join">
+    <input id="room-id" placeholder="Room ID" autocomplete="off" />
+    <button id="join-btn"><i class="fas fa-sign-in-alt"></i> Join</button>
+    <button id="create-btn"><i class="fas fa-plus-circle"></i> Create</button>
+  </div>
+
+  <div class="room-actions hidden" id="room-actions">
+    <span><i class="fas fa-hashtag"></i> Room: <b id="room-label"></b></span>
+    <div>
+      <button id="start-call-btn"><i class="fas fa-play-circle"></i> Start</button>
+      <button id="leave-room-btn"><i class="fas fa-right-from-bracket"></i> Leave</button>
+      <button id="delete-room-btn"><i class="fas fa-trash-alt"></i> Delete</button>
+    </div>
+  </div>
+
+  <button id="toggle-participants-btn" title="Show participants" style="display:none;"><i class="fas fa-users"></i></button>
+  <button id="toggle-chat-btn" title="Open chat" style="display:none;"><i class="fas fa-comment-alt"></i></button>
+
+  <div id="video-grid" class="video-grid hidden">
+    <div class="video-container">
+      <video id="local-video" autoplay playsinline muted></video>
+      <div class="you-label">You</div>
+    </div>
+  </div>
+
+  <div class="controls hidden" id="controls">
+    <button id="mic-btn"><i class="fas fa-microphone"></i> Mute</button>
+    <button id="cam-btn"><i class="fas fa-video"></i> Camera Off</button>
+    <button class="end" id="end-btn"><i class="fas fa-phone-slash"></i> End</button>
+  </div>
+
+  <div class="info-bar">
+    <i class="fas fa-exclamation-triangle"></i> Demo version • Camera & Mic enabled • <span id="participants-count">0</span> Participant(s)
+  </div>
+
+  <aside class="participants-panel" id="participants-panel">
+    <h4><i class="fas fa-user-friends"></i> Participants</h4>
+    <ul class="participants-list" id="participants-list"></ul>
+  </aside>
+  <aside id="chat-panel">
+    <div class="chat-header"><i class="fas fa-comments"></i> Room Chat</div>
+    <div id="chat-messages"></div>
+    <form id="chat-send-form" autocomplete="off" onsubmit="return false;">
+      <input id="chat-message-input" placeholder="Type a message..." maxlength="280" autocomplete="off"/>
+      <button id="chat-send-btn" type="submit"><i class="fas fa-paper-plane"></i></button>
+    </form>
+  </aside>
+</div>
+
+<div class="signup-modal" id="signup">
+  <div class="signup-box">
+    <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+    <button class="existing-account-btn" id="existing-account-btn"><i class="fas fa-user-check"></i> Existing account</button>
+    <input id="name" placeholder="Name" autocomplete="off" />
+    <input id="email" placeholder="Email" autocomplete="off" type="email" />
+    <input id="pass" type="password" placeholder="Password (6+ chars)" autocomplete="off" minlength="6" />
+    <div class="error-msg" id="error"></div>
+    <button id="signup-continue-btn"><i class="fas fa-check"></i> Continue</button>
+  </div>
+</div>
+
+<script>
+// Backend API endpoint for this app
+// Since index.html and insert.php are in the same folder, use a relative URL.
+const phpApiUrl = 'insert.php';
+
+// Debug: log API errors to console (including Invalid action details)
+function logApiError(data, context) {
+  if (!data) return;
+  console.warn("[API Error]" + (context ? " " + context : ""), data);
+  if (data.error === "Invalid action" && (data.action_provided != null || data.debug_request_preview)) {
+    console.warn("Invalid action debug:", {
+      action_provided: data.action_provided,
+      action_length: data.action_length,
+      request_preview: data.debug_request_preview,
+      expected_actions: data.expected_actions
+    });
+  }
+}
+
+let stream = null;
+let micOn = true;
+let camOn = true;
+let participants = [];
+let localUser = null;
+let chatOpen = false;
+let participantsPanelOpen = false;
+
+// Get DOM elements (guard against null in case structure changes)
+function getEl(id) { return document.getElementById(id); }
+const roomId = getEl("room-id");
+const roomLabel = getEl("room-label");
+const roomJoinDiv = getEl("room-join");
+const roomActionsDiv = getEl("room-actions");
+const videoGrid = getEl("video-grid");
+const controls = getEl("controls");
+const localVideo = getEl("local-video");
+const micBtn = getEl("mic-btn");
+const camBtn = getEl("cam-btn");
+const endBtn = getEl("end-btn");
+const signupModal = getEl("signup");
+const signupName = getEl("name");
+const signupEmail = getEl("email");
+const signupPass = getEl("pass");
+const signupError = getEl("error");
+const signupContinueBtn = getEl("signup-continue-btn");
+const existingAccountBtn = getEl("existing-account-btn");
+const joinBtn = getEl("join-btn");
+const createBtn = getEl("create-btn");
+const startCallBtn = getEl("start-call-btn");
+const leaveRoomBtn = getEl("leave-room-btn");
+const deleteRoomBtn = getEl("delete-room-btn");
+const participantsPanel = getEl("participants-panel");
+const participantsBtn = getEl("toggle-participants-btn");
+const participantsList = getEl("participants-list");
+const participantsCount = getEl("participants-count");
+const chatPanel = getEl("chat-panel");
+const chatBtn = getEl("toggle-chat-btn");
+const chatMessages = getEl("chat-messages");
+const chatSendForm = getEl("chat-send-form");
+const chatInput = getEl("chat-message-input");
+const chatSendBtn = getEl("chat-send-btn");
+const logoutBtn = getEl("logout-btn"); // <-- ADD
+const deleteAccountBtn = getEl("delete-account-btn");
+
+// Auth modal mode: false = Sign Up, true = Sign In
+let isLoginMode = false;
+
+function showSignupModal(show) {
+  if (signupModal) signupModal.style.display = show ? "flex" : "none";
+}
+function showRoomJoin(show) {
+  roomJoinDiv && roomJoinDiv.classList.toggle("hidden", !show);
+  roomActionsDiv && roomActionsDiv.classList.toggle("hidden", show);
+}
+function isUserSignedUp() {
+  return !!localStorage.getItem("oncall_user_v2");
+}
+function getUser() {
+  try {
+    return JSON.parse(localStorage.getItem("oncall_user_v2"));
+  } catch (e) { return null; }
+}
+function saveUser(name, email) {
+  localUser = { name, email };
+  localStorage.setItem("oncall_user_v2", JSON.stringify(localUser));
+}
+function clearSignupInputs() {
+  if (signupName) signupName.value = "";
+  if (signupEmail) signupEmail.value = "";
+  if (signupPass) signupPass.value = "";
+  if (signupError) signupError.innerText = "";
+}
+function validateSignupFields() {
+  const n = signupName ? signupName.value.trim() : "";
+  const e = signupEmail ? signupEmail.value.trim() : "";
+  const p = signupPass ? signupPass.value : "";
+  if (!n || !e || p.length < 6) {
+    if (signupError) signupError.innerText = "Fill all fields (6+ chars)";
+    return false;
+  }
+  if (!/^[^@]+@[^@]+\.[^@]+$/.test(e)) {
+    if (signupError) signupError.innerText = "Enter a valid email address";
+    return false;
+  }
+  if (signupError) signupError.innerText = "";
+  return true;
+}
+
+function validateLoginFields() {
+  const e = signupEmail ? signupEmail.value.trim() : "";
+  const p = signupPass ? signupPass.value : "";
+
+  if (!e || !p) {
+    if (signupError) signupError.innerText = "Enter email and password";
+    return false;
+  }
+  if (!/^[^@]+@[^@]+\.[^@]+$/.test(e)) {
+    if (signupError) signupError.innerText = "Enter a valid email address";
+    return false;
+  }
+  if (signupError) signupError.innerText = "";
+  return true;
+}
+function signup() {
+  if (!validateSignupFields()) return;
+
+  fetch(phpApiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "signup",
+      name: signupName.value.trim(),
+      email: signupEmail.value.trim(),
+      pass: signupPass.value
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data && data.success) {
+      saveUser(signupName.value.trim(), signupEmail.value.trim());
+      showSignupModal(false);
+      clearSignupInputs();
+      participants = [{ name: localUser.name, email: localUser.email, self: true }];
+      updateParticipantsList();
+      // Show logout button after signup
+      if (logoutBtn) logoutBtn.style.display = "flex";
+      if (deleteAccountBtn) deleteAccountBtn.style.display = "flex";
+    } else {
+      logApiError(data, "signup");
+      if (signupError)
+        signupError.innerText = (data && data.error) ? data.error : "Signup failed (server)";
+    }
+  })
+  .catch(() => {
+    if (signupError) signupError.innerText = "Signup failed (network)";
+  });
+}
+
+function loginExistingUser() {
+  if (!validateLoginFields()) return;
+
+  const e = signupEmail ? signupEmail.value.trim() : "";
+  const p = signupPass ? signupPass.value : "";
+
+  fetch(phpApiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "login",
+      email: e,
+      pass: p
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data && data.success && data.user) {
+      // Save minimal user info locally (name + email)
+      saveUser(data.user.name || "", data.user.email || e);
+      showSignupModal(false);
+      clearSignupInputs();
+      participants = [{ name: localUser.name, email: localUser.email, self: true }];
+      updateParticipantsList();
+      if (logoutBtn) logoutBtn.style.display = "flex";
+      if (deleteAccountBtn) deleteAccountBtn.style.display = "flex";
+    } else {
+      logApiError(data, "login");
+      if (signupError)
+        signupError.innerText = (data && data.error) ? data.error : "Sign in failed (server)";
+    }
+  })
+  .catch(() => {
+    if (signupError) signupError.innerText = "Sign in failed (network)";
+  });
+}
+
+function submitAuthForm() {
+  if (isLoginMode) {
+    loginExistingUser();
+  } else {
+    signup();
+  }
+}
+
+if (signupContinueBtn) signupContinueBtn.addEventListener("click", submitAuthForm);
+
+function setAuthMode(loginMode) {
+  isLoginMode = !!loginMode;
+
+  const titleEl = signupModal ? signupModal.querySelector("h2") : null;
+
+  if (isLoginMode) {
+    if (titleEl) titleEl.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+    if (signupName) signupName.style.display = "none";
+    if (signupContinueBtn) signupContinueBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+    if (existingAccountBtn) existingAccountBtn.innerHTML = '<i class="fas fa-user-plus"></i> New account';
+  } else {
+    if (titleEl) titleEl.innerHTML = '<i class="fas fa-user-plus"></i> Sign Up';
+    if (signupName) signupName.style.display = "";
+    if (signupContinueBtn) signupContinueBtn.innerHTML = '<i class="fas fa-check"></i> Continue';
+    if (existingAccountBtn) existingAccountBtn.innerHTML = '<i class="fas fa-user-check"></i> Existing account';
+  }
+
+  clearSignupInputs();
+  if (signupError) signupError.innerText = "";
+}
+
+// "Existing account" button toggles between Sign Up and Sign In
+if (existingAccountBtn) existingAccountBtn.addEventListener("click", function() {
+  setAuthMode(!isLoginMode);
+  showSignupModal(true);
+});
+
+[signupName, signupEmail, signupPass].forEach(input => {
+  if (input) {
+    input.addEventListener("input", () => {
+      if (signupError) signupError.innerText = "";
+    });
+  }
+});
+if (signupPass) {
+  signupPass.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") submitAuthForm();
+  });
+}
+function updateParticipantsList() {
+  if (!participantsList || !participantsCount || !participantsBtn) return;
+  participantsList.innerHTML = participants.map(p =>
+    `<li>${p.self ? "<i class='fas fa-user-ninja'></i>" : "<i class='fas fa-user'></i>"} ${p.name}${p.self ? " (You)" : ""}</li>`
+  ).join('');
+  participantsCount.innerText = participants.length;
+  participantsBtn.style.display = participants.length ? "flex" : "none";
+}
+function addParticipant(name, email) {
+  if (!participants.some(p=>p.email===email))
+    participants.push({ name, email });
+  updateParticipantsList();
+}
+function removeParticipant(email) {
+  participants = participants.filter(p=>p.email !== email);
+  updateParticipantsList();
+}
+
+// Show modal if needed and set up initial participants
+if (!isUserSignedUp()) {
+  // Default to Sign Up mode for new visitors
+  setAuthMode(false);
+  showSignupModal(true);
+  if (logoutBtn) logoutBtn.style.display = "none";
+} else {
+  localUser = getUser();
+  showSignupModal(false);
+  if (logoutBtn) logoutBtn.style.display = "flex";
+  if (localUser) {
+    participants = [{ name: localUser.name, email: localUser.email, self: true }];
+    updateParticipantsList();
+  }
+}
+
+function joinRoom() {
+  const user = localUser || getUser();
+  if (!user || !user.email) {
+    alert("Please sign in first.");
+    showSignupModal(true);
+    return;
+  }
+  if (!roomId || !roomId.value.trim()) {
+    alert("Enter room code");
+    return;
+  }
+  const roomCode = roomId.value.trim();
+  fetch(phpApiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "join_room",
+      room_code: roomCode,
+      email: user.email,
+      user: user
+    })
+  })
+  .then(response=>response.json())
+  .then(data=>{
+    if (data && data.success) {
+      showRoomJoin(false);
+      if (roomLabel) roomLabel.innerText = roomCode;
+      participants = [{ name: user.name, email: user.email, self: true }];
+      updateParticipantsList();
+      if (participantsBtn) participantsBtn.style.display = "flex";
+      if (chatBtn) chatBtn.style.display = "flex";
+      if (logoutBtn) logoutBtn.style.display = "flex";
+    } else {
+      logApiError(data, "joinRoom");
+      alert((data && data.error) ? data.error : "Could not join room");
+    }
+  })
+  .catch(()=>{
+    alert("Network error connecting to server");
+  });
+}
+
+function createRoom() {
+  localUser = localUser || getUser();
+  if (!localUser || !localUser.email) {
+    alert("Please sign in first to create a room.");
+    showSignupModal(true);
+    return;
+  }
+  fetch(phpApiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "create_room",
+      email: localUser.email,
+      user: localUser
+    })
+  })
+  .then(response=>response.json())
+  .then(data=>{
+    if (data && data.success && (data.room_code || data.room_id)) {
+      if (roomId) roomId.value = data.room_code || String(data.room_id);
+      joinRoom();
+    } else {
+      logApiError(data, "createRoom");
+      alert((data && data.error) ? data.error : "Could not create room");
+    }
+  })
+  .catch(()=>{
+    alert("Network error creating room");
+  });
+}
+function leaveRoom() {
+  endCall();
+  showRoomJoin(true);
+
+  // Capture current room id before clearing UI so we can notify the server
+  const currentRoomId =
+    (roomLabel && roomLabel.innerText && roomLabel.innerText.trim()) ? roomLabel.innerText.trim() :
+    (roomId && roomId.value && roomId.value.trim()) ? roomId.value.trim() :
+    "";
+
+  if (roomLabel) roomLabel.innerText = "";
+  if (roomId) roomId.value = "";
+  if (localUser) participants = [{ name: localUser.name, email: localUser.email, self: true }];
+  updateParticipantsList();
+  if (participantsBtn) participantsBtn.style.display = "none";
+  if (chatBtn) chatBtn.style.display = "none";
+
+  // Inform backend that this user left the room;
+  // PHP will auto-delete the room if no participants remain.
+  const user = localUser || getUser();
+  if (currentRoomId && user && user.email) {
+    fetch(phpApiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "leave_room",
+        room_id: currentRoomId,
+        email: user.email,
+        user: user
+      })
+    }).catch(() => {});
+  }
+}
+
+function deleteRoom() {
+  if (!roomLabel || !roomLabel.innerText.trim()) {
+    alert("No active room to delete.");
+    return;
+  }
+
+  const confirmDelete = confirm("Are you sure you want to permanently delete this room?");
+  if (!confirmDelete) return;
+
+  fetch(phpApiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "delete_room",
+      room_id: roomLabel.innerText.trim()
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data && data.success) {
+      alert("Room deleted.");
+      leaveRoom();
+    } else {
+      logApiError(data, "deleteRoom");
+      alert((data && data.error) ? data.error : "Failed to delete room");
+    }
+  })
+  .catch(() => {
+    alert("Network error while deleting room");
+  });
+}
+if (joinBtn) joinBtn.addEventListener("click", joinRoom);
+if (createBtn) createBtn.addEventListener("click", createRoom);
+if (leaveRoomBtn) leaveRoomBtn.addEventListener("click", leaveRoom);
+if (deleteRoomBtn) deleteRoomBtn.addEventListener("click", deleteRoom);
+if (roomId) {
+  roomId.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") joinRoom();
+  });
+}
+
+async function startCall() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    if (localVideo) localVideo.srcObject = stream;
+    if (videoGrid) videoGrid.classList.remove("hidden");
+    if (controls) controls.classList.remove("hidden");
+    micOn = true;
+    camOn = true;
+    if (micBtn) micBtn.innerHTML = '<i class="fas fa-microphone"></i> Mute';
+    if (camBtn) camBtn.innerHTML = '<i class="fas fa-video"></i> Camera Off';
+    if (participantsBtn) participantsBtn.style.display = "flex";
+    if (chatBtn) chatBtn.style.display = "flex";
+    fetch(phpApiUrl, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        action: "start_call",
+        room_id: roomLabel ? roomLabel.innerText : "",
+        user: localUser
+      })
+    }).catch(()=>{});
+  } catch (err) {
+    alert("Could not access camera/mic. Please check your browser permissions.");
+  }
+}
+function toggleMic() {
+  if (!stream) return;
+  micOn = !micOn;
+  stream.getAudioTracks().forEach(t => t.enabled = micOn);
+  if (micBtn) micBtn.innerHTML = micOn ? '<i class="fas fa-microphone"></i> Mute' : '<i class="fas fa-microphone-slash"></i> Unmute';
+}
+function toggleCam() {
+  if (!stream) return;
+  camOn = !camOn;
+  stream.getVideoTracks().forEach(t => t.enabled = camOn);
+  if (camBtn) camBtn.innerHTML = camOn ? '<i class="fas fa-video"></i> Camera Off' : '<i class="fas fa-video-slash"></i> Camera On';
+}
+function endCall() {
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+  }
+  if (videoGrid) videoGrid.classList.add("hidden");
+  if (controls) controls.classList.add("hidden");
+  if (localVideo) localVideo.srcObject = null;
+  if(roomLabel && localUser) {
+    fetch(phpApiUrl, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({action:"end_call", room_id: roomLabel.innerText, user: localUser})
+    }).catch(()=>{});
+  }
+}
+if (startCallBtn) startCallBtn.addEventListener("click", startCall);
+if (micBtn) micBtn.addEventListener("click", toggleMic);
+if (camBtn) camBtn.addEventListener("click", toggleCam);
+if (endBtn) endBtn.addEventListener("click", endCall);
+
+if (participantsBtn) participantsBtn.addEventListener("click", () => {
+  participantsPanelOpen = !participantsPanelOpen;
+  if (participantsPanel) participantsPanel.classList.toggle("open", participantsPanelOpen);
+});
+if (chatBtn) chatBtn.addEventListener("click", () => {
+  chatOpen = !chatOpen;
+  if (chatPanel) chatPanel.classList.toggle("open", chatOpen);
+  if(chatOpen && chatInput) setTimeout(()=>chatInput.focus(),240);
+});
+
+function appendMessage(msg, isMe) {
+  if (chatSendForm) chatSendForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  let txt = chatInput ? chatInput.value.trim() : "";
+  if(!txt) return;
+  appendMessage(txt, true);
+
+  fetch(phpApiUrl, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      action: "send_message",
+      room_code: roomLabel ? roomLabel.innerText : "",
+      email: localUser.email,
+      message: txt
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data && !data.success) {
+      appendMessage("Error: " + (data.error || "Failed to send"), false);
+    }
+  })
+  .catch(()=>{
+    appendMessage("Message sent!", false);
+  });
+  if (chatInput) chatInput.value = "";
+});
+  if (chatInput) chatInput.value = "";
+};
+document.addEventListener("keydown", function(e){
+  if(e.key==="Escape"){
+    if (chatOpen && chatBtn) chatBtn.click();
+    if (participantsPanelOpen && participantsBtn) participantsBtn.click();
+    if(signupModal && signupModal.style.display === "flex") showSignupModal(false);
+  }
+});
+[signupName, signupEmail, signupPass].forEach(input => {
+  if (input) input.addEventListener("input", () => {
+    if (signupError) signupError.innerText = "";
+  });
+});
+[participantsBtn, chatBtn].forEach(btn => {
+  if (btn) {
+    btn.addEventListener("focus",()=>btn.style.outline="2px solid #fd4586");
+    btn.addEventListener("blur",()=>btn.style.outline="none");
+  }
+});
+
+// ----------- LOGOUT FUNCTIONALITY -----------
+
+function logOut() {
+  // Clear all user data
+  localStorage.removeItem("oncall_user_v2");
+  localUser = null;
+  // Hide the logout button
+  if (logoutBtn) logoutBtn.style.display = "none";
+  if (deleteAccountBtn) deleteAccountBtn.style.display = "none";
+  // End any call
+  endCall();
+  // Hide room/participants/chat stuff
+  if (roomLabel) roomLabel.innerText = "";
+  if (roomId) roomId.value = "";
+  if (participantsBtn) participantsBtn.style.display = "none";
+  if (chatBtn) chatBtn.style.display = "none";
+  if (videoGrid) videoGrid.classList.add("hidden");
+  if (controls) controls.classList.add("hidden");
+  // Reset participants list
+  participants = [];
+  updateParticipantsList();
+  // Show signup modal
+  showSignupModal(true);
+}
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", logOut);
+}
+
+// ----------- DELETE ACCOUNT FUNCTIONALITY -----------
+
+function deleteAccount() {
+  const user = getUser();
+  if (!user || !user.email) {
+    alert("No signed-in user to delete.");
+    return;
+  }
+
+  const confirmDelete = confirm("This will permanently delete your account and related data. Continue?");
+  if (!confirmDelete) return;
+
+  // Ask the user to re-enter their password for security
+  const password = prompt("Please enter your password to confirm account deletion:");
+  if (!password) {
+    alert("Account deletion cancelled.");
+    return;
+  }
+
+  fetch(phpApiUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "delete_account",
+      email: user.email,
+      user: user,
+      pass: password
+    })
+  })
+  .then(response => response.text())
+  .then(text => {
+    let data;
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch (e) {
+      alert("Server returned an invalid response. Check the console or try again.");
+      console.error("Delete account response (not JSON):", text);
+      return;
+    }
+    if (data && data.success) {
+      alert("Your account has been deleted.");
+      logOut();
+    } else {
+      logApiError(data, "deleteAccount");
+      alert((data && data.error) ? data.error : "Failed to delete account");
+    }
+  })
+  .catch(() => {
+    alert("Network error while deleting account. Check your connection and that the server is running.");
+  });
+}
+
+if (deleteAccountBtn) {
+  deleteAccountBtn.addEventListener("click", deleteAccount);
+}
+
+// Optionally show/hide logout button on modal close/open for safety
+(function(){
+  if (!isUserSignedUp() && logoutBtn) logoutBtn.style.display = "none";
+  if (isUserSignedUp() && logoutBtn) logoutBtn.style.display = "flex";
+  if (!isUserSignedUp() && deleteAccountBtn) deleteAccountBtn.style.display = "none";
+  if (isUserSignedUp() && deleteAccountBtn) deleteAccountBtn.style.display = "flex";
+})();
+</script>
+</body>
+</html>
